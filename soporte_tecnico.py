@@ -208,7 +208,7 @@ def start_client():
 
             client_socket.send(message.encode('utf-8'))
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     server_thread = threading.Thread(target=start_server, daemon=True)
     server_thread.start()
 
