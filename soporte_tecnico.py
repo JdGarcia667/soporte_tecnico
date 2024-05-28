@@ -15,7 +15,7 @@ def connect_to_db():
         password='your_db_password',
         database='your_db_name'
     )
-'''
+
 def handle_client(client_socket, address, messages, file, nodos, command_queue):
     db_connection = connect_to_db()
     cursor = db_connection.cursor()
@@ -49,7 +49,7 @@ def handle_client(client_socket, address, messages, file, nodos, command_queue):
     cursor.close()
     db_connection.close()
     client_socket.close()
-
+'''
 def notify_other_nodes(command, origin_node, nodos, retry_queue):
     for node, ip in nodos.items():
         if ip == origin_node:
