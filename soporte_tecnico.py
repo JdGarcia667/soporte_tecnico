@@ -2,11 +2,12 @@ import socket
 import threading
 import time
 import os
-import mysql.connector
+#import mysql.connector
 from queue import Queue, Empty
 import json
 
 # Conectar a la base de datos MariaDB
+'''
 def connect_to_db():
     return mysql.connector.connect(
         host='your_db_host',
@@ -14,7 +15,7 @@ def connect_to_db():
         password='your_db_password',
         database='your_db_name'
     )
-
+'''
 def handle_client(client_socket, address, messages, file, nodos, command_queue):
     db_connection = connect_to_db()
     cursor = db_connection.cursor()
