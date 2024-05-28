@@ -108,14 +108,14 @@ def start_server():
     }
     command_queue = Queue()
     retry_queue = Queue()
-
+'''
     def notify_others():
         while True:
             command = command_queue.get()
             if command is None:
                 break
             notify_other_nodes(command, '0.0.0.0', nodos, retry_queue)
-    
+'''
     notifier_thread = threading.Thread(target=notify_others, daemon=True)
     notifier_thread.start()
 
