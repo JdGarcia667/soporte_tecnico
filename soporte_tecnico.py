@@ -15,10 +15,11 @@ def connect_to_db():
         password='your_db_password',
         database='your_db_name'
     )
+'''
 
 def handle_client(client_socket, address, messages, file, nodos, command_queue):
-    db_connection = connect_to_db()
-    cursor = db_connection.cursor()
+    # db_connection = connect_to_db()
+    # cursor = db_connection.cursor()
 
     while True:
         data = client_socket.recv(1024).decode('utf-8')
@@ -34,8 +35,8 @@ def handle_client(client_socket, address, messages, file, nodos, command_queue):
 
         # Suponemos que los mensajes contienen comandos SQL
         try:
-            cursor.execute(data)
-            db_connection.commit()
+            # cursor.execute(data)
+            # db_connection.commit()
 
             # Agregar el comando a la cola de comandos para notificar a otros nodos
             command_queue.put(data)
@@ -46,10 +47,10 @@ def handle_client(client_socket, address, messages, file, nodos, command_queue):
 
         client_socket.send(response.encode('utf-8'))
 
-    cursor.close()
-    db_connection.close()
+    # cursor.close()
+    # db_connection.close()
     client_socket.close()
-'''
+
 def notify_other_nodes(command, origin_node, nodos, retry_queue):
     for node, ip in nodos.items():
         if ip == origin_node:
@@ -207,7 +208,7 @@ def start_client():
 
             client_socket.send(message.encode('utf-8'))
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     server_thread = threading.Thread(target=start_server, daemon=True)
     server_thread.start()
 
