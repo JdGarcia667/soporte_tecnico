@@ -2,8 +2,21 @@ import socket
 import threading
 import time
 import os
+import mariadb
+
+# Conectar a la base de datos MariaDB
+def connect_to_db():
+    return mariadb.connect(
+        host='your_db_host',
+        user='your_db_user',
+        password='your_db_password',
+        database='your_db_name'
+    )
 
 def handle_client(client_socket, address, messages, file):
+    db_connection = connect_to_db()
+    cursor = db_connection.cursor()
+
     while True:
         data = client_socket.recv(1024).decode('utf-8')
         if not data:
@@ -19,6 +32,16 @@ def handle_client(client_socket, address, messages, file):
         response = f"Mensaje recibido a las {current_time}\n"
         client_socket.send(response.encode('utf-8'))
 
+        # Guardar el mensaje en la base de datos
+        try:
+            cursor.execute("INSERT INTO messages (timestamp, address, message) VALUES (?, ?, ?)",
+                           (current_time, address[0], data))
+            db_connection.commit()
+        except mariadb.Error as e:
+            print(f"Error guardando el mensaje en la base de datos: {e}")
+
+    cursor.close()
+    db_connection.close()
     client_socket.close()
 
 def start_server():
