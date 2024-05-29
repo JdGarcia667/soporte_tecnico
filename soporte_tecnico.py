@@ -3,7 +3,7 @@ import threading
 import time
 import os
 
-def handle_client(client_socket, address, messages, file, nodos):
+def handle_client(client_socket, address, messages, file):
     while True:
         data = client_socket.recv(1024).decode('utf-8')
         if not data:
@@ -16,23 +16,10 @@ def handle_client(client_socket, address, messages, file, nodos):
         with open(file, 'a') as f:
             f.write(message + "\n")
 
-        # Notificar a otros nodos sobre el mensaje recibido
-        notify_other_nodes(message, nodos)
-
         response = f"Mensaje recibido a las {current_time}\n"
         client_socket.send(response.encode('utf-8'))
 
     client_socket.close()
-
-def notify_other_nodes(message, nodos):
-    for node, ip in nodos.items():
-        try:
-            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client_socket.connect((ip, 12345))
-            client_socket.send(message.encode('utf-8'))
-            client_socket.close()
-        except Exception as e:
-            print(f"No se pudo conectar a {node} ({ip}): {e}")
 
 def start_server():
     host = '0.0.0.0'
@@ -46,18 +33,12 @@ def start_server():
 
     messages = []
     file = "mensajes.txt"
-    nodos = {
-        'A': '192.168.132.131',
-        'B': '192.168.132.128',
-        'C': '192.168.132.132',
-        #'D': '192.168.108.133'
-    }
 
     while True:
         client_socket, addr = server.accept()
         print(f"Conexión entrante desde {addr[0]}:{addr[1]}")
 
-        client_handler = threading.Thread(target=handle_client, args=(client_socket, addr, messages, file, nodos))
+        client_handler = threading.Thread(target=handle_client, args=(client_socket, addr, messages, file))
         client_handler.start()
 
 def start_client():
@@ -134,7 +115,7 @@ def start_client():
 
             client_socket.send(message.encode('utf-8'))
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     server_thread = threading.Thread(target=start_server, daemon=True)
     server_thread.start()
 
