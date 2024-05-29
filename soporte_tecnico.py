@@ -2,7 +2,7 @@ import socket
 import threading
 import time
 import os
-import mariadb
+import mysql.connector
 
 # Conectar a la base de datos MariaDB
 def connect_to_db():
